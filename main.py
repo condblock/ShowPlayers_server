@@ -1,4 +1,5 @@
 import sqlite3
+from flask_cors import CORS
 from configparser import ConfigParser
 import logging
 from datetime import datetime
@@ -51,6 +52,7 @@ def formatter(list):
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def index():
@@ -74,4 +76,4 @@ def form():
     return render_template('form.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True, port=80)

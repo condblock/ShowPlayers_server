@@ -50,3 +50,6 @@ message:
 message:
 이름: 박선우	학교: 신송고	시작 가능 시간: 2025-01-01 20:00:00
 
+2025-01-01 17:39:31,317 - Logger - INFO - Players requested successfully!
+2025-01-01 17:43:34,084 - Logger - INFO - Players requested successfully!
+2025-01-01 17:44:28,745 - Logger - INFO - Players requested successfully!
