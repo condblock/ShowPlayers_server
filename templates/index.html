@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>구구덕 참여 신청하기</title>
+</head>
+<body>
+    <h1>구구덕 리스트</h1>
+    <table border="1">
+        <tr>
+            <th></th>
+            <th>이름</th>
+            <th>학교</th>
+            <th>시작 가능 시간</th>
+        </tr>
+        {% for item in data_list %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+                <td>{{ item[2] }}</td>
+                <td>{{ item[3] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="/form">신청하기</a>
+</body>
+</html>
