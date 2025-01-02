@@ -63,7 +63,7 @@ def index():
 def form():
     user_ip = request.remote_addr
     if check_player_ip(cur=cur, logger=logger, ip_address=user_ip):
-        return "You have already submitted the form."
+        return "이미 신청하셨습니다."
     
     if request.method == 'POST':
         name = request.form['name']
