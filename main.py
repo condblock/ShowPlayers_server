@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 import os
 from webhook import send_webhook
-from db.db import insert_player, get_players
+from db.db import insert_player, get_players, check_player_ip
 
 # init
 # get webhook url
@@ -15,7 +15,7 @@ webhook_url = config['urls']['webhook_url']
 
 # generate log file
 current_date = datetime.now().strftime("%Y-%m-%d")
-log_file_name = f"app_{current_date}.log"  # 예: app_2024-03-14.log
+log_file_name = f"app_{current_date}.log"
 log_file_path = os.path.join("logs", log_file_name)
 
 # generate log dir
@@ -45,7 +45,7 @@ cur = conn.cursor()
 def formatter(list):
     text = ''
     for i in list:
-        text += f'이름: {i[1]}\t학교: {i[2]}\t시작 가능 시간: {i[3]}\n'
+        text += f'이름: {i[1]}\t학교: {i[2]}\t시작 가능 시간: {i[3]}\t종료 예정 시간: {i[4]}\n'
     return text
 
 # create web
@@ -61,17 +61,35 @@ def index():
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
+    user_ip = request.remote_addr
+    if check_player_ip(cur=cur, logger=logger, ip_address=user_ip):
+        return "You have already submitted the form."
+    
     if request.method == 'POST':
         name = request.form['name']
         school = request.form['school']
-        period = request.form['period']
-        hour = request.form['hour']
-        minute = request.form['minute']
-        if period == 'PM':
-            hour = str(int(hour) + 12)
-        startTime = datetime.now().replace(hour=int(hour), minute=int(minute), second=0, microsecond=0)
-        insert_player(cur=cur, logger=logger, name=name, school=school, startTime=startTime)
-        send_webhook(webhook_url=webhook_url, message=f"{name}님이 새로 등록했습니다!\n{formatter(get_players(cur=cur, logger=logger))}", logger=logger)
+        start_period = request.form['start_period']
+        start_hour = request.form['start_hour']
+        start_minute = request.form['start_minute']
+        end_period = request.form['end_period']
+        end_hour = request.form['end_hour']
+        end_minute = request.form['end_minute']
+        
+        if start_period == 'PM' and start_hour != '12':
+            start_hour = str(int(start_hour) + 12)
+        elif start_period == 'AM' and start_hour == '12':
+            start_hour = '00'
+        
+        if end_period == 'PM' and end_hour != '12':
+            end_hour = str(int(end_hour) + 12)
+        elif end_period == 'AM' and end_hour == '12':
+            end_hour = '00'
+        
+        startTime = f"{start_hour.zfill(2)}:{start_minute.zfill(2)}"
+        endTime = f"{end_hour.zfill(2)}:{end_minute.zfill(2)}"
+        
+        insert_player(cur, logger, name, school, startTime, endTime, user_ip)
+        send_webhook(webhook_url, message=f"{name}님이 새로 등록했습니다!\n{formatter(get_players(cur=cur, logger=logger))}", logger=logger)
         return render_template('complete.html')
     return render_template('form.html')
 

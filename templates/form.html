@@ -14,20 +14,41 @@
 
         <label for="startTime">시작 가능 시간:</label><br>
 
-        <select id="period" name="period">
+        <select id="start_period" name="start_period">
             <option value="AM">오전</option>
             <option value="PM">오후</option>
         </select><br>
 
-        <label for="hour">시:</label>
-        <select id="hour" name="hour">
+        <label for="start_hour">시:</label>
+        <select id="start_hour" name="start_hour">
             {% for hour in range(1, 13) %}
                 <option value="{{ hour }}">{{ hour }}</option>
             {% endfor %}
         </select>
 
-        <label for="minute">분:</label>
-        <select id="minute" name="minute">
+        <label for="start_minute">분:</label>
+        <select id="start_minute" name="start_minute">
+            {% for minute in range(0, 60, 15) %}
+                <option value="{{ minute }}">{{ minute }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="endTime">종료 예정 시간:</label><br>
+
+        <select id="end_period" name="end_period">
+            <option value="AM">오전</option>
+            <option value="PM">오후</option>
+        </select><br>
+
+        <label for="end_hour">시:</label>
+        <select id="end_hour" name="end_hour">
+            {% for hour in range(1, 13) %}
+                <option value="{{ hour }}">{{ hour }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="end_minute">분:</label>
+        <select id="end_minute" name="end_minute">
             {% for minute in range(0, 60, 15) %}
                 <option value="{{ minute }}">{{ minute }}</option>
             {% endfor %}

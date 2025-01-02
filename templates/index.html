@@ -11,6 +11,7 @@
             <th>이름</th>
             <th>학교</th>
             <th>시작 가능 시간</th>
+            <th>종료 예정 시간</th>
         </tr>
         {% for item in data_list %}
             <tr>
@@ -18,6 +19,7 @@
                 <td>{{ item[1] }}</td>
                 <td>{{ item[2] }}</td>
                 <td>{{ item[3] }}</td>
+                <td>{{ item[4] }}</td>
             </tr>
         {% endfor %}
     </table>
